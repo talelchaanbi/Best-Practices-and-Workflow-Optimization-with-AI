@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Cards Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+            align-items: stretch; /* Ensure items fill row height */
+            justify-items: stretch; /* Ensure items take full column width */
+        }
+
+        /* Force 4 columns on large screens */
+        @media (min-width: 1100px) {
+            .pricing-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
+        }
+
+        /* Make sure custom element fills the grid cell height */
+        .pricing-grid pricing-card {
+            height: 100%;
+        }
+
+        .theme-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .theme-btn.active {
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .event-log {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            color: white;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .event-log h3 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .event-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.75rem;
+            border-radius: 0.25rem;
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .theme-controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Pricing Plans</h1>
+            <p>Choose the perfect plan for your needs</p>
+        </div>
+
+        <div class="theme-controls">
+            <button class="theme-btn active" data-theme="default">Default Theme</button>
+            <button class="theme-btn" data-theme="dark">Dark Theme</button>
+            <button class="theme-btn" data-theme="purple">Purple Theme</button>
+            <button class="theme-btn" data-theme="green">Green Theme</button>
+        </div>
+
+        <div class="pricing-grid">
+            <pricing-card 
+                title="Basic Plan"
+                price="$9.99"
+                interval="month"
+                features='["1 GB Storage", "Basic Support", "All Core Features", "Email Support"]'
+                cta-text="Start Free Trial"
+                cta-url="#basic">
+                <span slot="tag">Popular</span>
+            </pricing-card>
+
+            <pricing-card 
+                title="Pro Plan"
+                price="$29.99"
+                interval="month"
+                features='["10 GB Storage", "Priority Support", "Advanced Features", "Phone Support", "API Access"]'
+                cta-text="Go Pro"
+                cta-url="#pro">
+                <span slot="tag">Best Value</span>
+            </pricing-card>
+
+            <pricing-card 
+                title="Enterprise Plan"
+                price="$99.99"
+                interval="month"
+                features='["Unlimited Storage", "24/7 Support", "All Features", "Dedicated Manager", "Custom Integrations", "SLA Guarantee"]'
+                cta-text="Contact Sales"
+                cta-url="#enterprise">
+                <span slot="tag">Enterprise</span>
+            </pricing-card>
+
+            <pricing-card 
+                title="Free Plan"
+                price="$0"
+                interval="month"
+                features='["100 MB Storage", "Community Support", "Basic Features"]'
+                cta-text="Get Started"
+                disabled>
+            </pricing-card>
+        </div>
+<br><br>
+        <div class="event-log">
+            <h3>Event Log</h3>
+            <div id="event-list">
+                <div class="event-item">Ready to receive pricing card events...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="pricing-card.js"></script>
+    <script>
+        // Theme switching functionality
+        const themeButtons = document.querySelectorAll('.theme-btn');
+        const pricingCards = document.querySelectorAll('pricing-card');
+
+        const themes = {
+            default: {},
+            dark: {
+                '--card-bg': '#1f2937',
+                '--card-border': '#374151',
+                '--text-primary': '#f9fafb',
+                '--text-secondary': '#d1d5db',
+                '--border-color': '#374151',
+                '--tag-bg': '#451a03',
+                '--tag-text': '#fbbf24'
+            },
+            purple: {
+                '--card-bg': '#faf5ff',
+                '--card-border': '#e9d5ff',
+                '--text-primary': '#581c87',
+                '--text-secondary': '#7c3aed',
+                '--text-accent': '#7c3aed',
+                '--button-bg': '#7c3aed',
+                '--button-bg-hover': '#6d28d9',
+                '--border-color': '#e9d5ff',
+                '--tag-bg': '#ede9fe',
+                '--tag-text': '#5b21b6'
+            },
+            green: {
+                '--card-bg': '#f0fdf4',
+                '--card-border': '#bbf7d0',
+                '--text-primary': '#14532d',
+                '--text-secondary': '#16a34a',
+                '--text-accent': '#16a34a',
+                '--button-bg': '#16a34a',
+                '--button-bg-hover': '#15803d',
+                '--border-color': '#bbf7d0',
+                '--tag-bg': '#dcfce7',
+                '--tag-text': '#166534'
+            }
+        };
+
+        themeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                themeButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                // Apply theme to all pricing cards
+                const theme = themes[button.dataset.theme];
+                pricingCards.forEach(card => {
+                    Object.entries(theme).forEach(([property, value]) => {
+                        card.style.setProperty(property, value);
+                    });
+                });
+            });
+        });
+
+        // Event logging
+        const eventList = document.getElementById('event-list');
+        
+        function logEvent(event) {
+            const eventItem = document.createElement('div');
+            eventItem.className = 'event-item';
+            eventItem.innerHTML = `
+                <strong>${new Date().toLocaleTimeString()}</strong><br>
+                Plan: ${event.detail.title}<br>
+                Price: ${event.detail.price}/${event.detail.interval}<br>
+                Features: ${event.detail.features.length} items
+            `;
+            eventList.insertBefore(eventItem, eventList.firstChild);
+            
+            // Keep only last 10 events
+            while (eventList.children.length > 11) {
+                eventList.removeChild(eventList.lastChild);
+            }
+        }
+
+        // Listen for pricing card events
+        document.addEventListener('pricing-card:cta', logEvent);
+
+        // Note: Hover interactions handled inside the component to avoid layout shifts
+    </script>
+</body>
+</html>
