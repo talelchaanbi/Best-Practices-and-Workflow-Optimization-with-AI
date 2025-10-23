@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing Card Demo</title>
+    <meta name="description" content="Demo of reusable <pricing-card> web component" />
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      html, body { height: 100%; }
+      body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; }
+      .wrap {
+        min-height: 100%;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+      }
+      header, footer {
+        padding: 16px 20px;
+      }
+      header h1 { margin: 0; font-size: 1.25rem; }
+      main { padding: 20px; }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 20px;
+      }
+      @media (min-width: 640px) {
+        .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+      @media (min-width: 1024px) {
+        .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+    </style>
+    <script type="module" src="../src/components/pricing-card.js"></script>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Pricing Cards</h1>
+      </header>
+      <main>
+        <div class="grid" id="grid">
+          <pricing-card
+            title="Basic"
+            price="$9.99"
+            interval="/month"
+            features='["1 GB Storage", "Basic Support", "All Core Features"]'
+            cta-text="Start Trial"
+          >
+            <span slot="tag"></span>
+          </pricing-card>
+
+          <pricing-card
+            title="Pro"
+            price="$29.99"
+            interval="/month"
+            features='["100 GB Storage", "Priority Support", "Advanced Analytics", "Custom Reports"]'
+            cta-text="Upgrade"
+            cta-url="#"
+          >
+            <span slot="tag">Most Popular</span>
+          </pricing-card>
+
+          <pricing-card
+            title="Enterprise"
+            price="Contact us"
+            interval=""
+            features='["Unlimited Storage", "Dedicated Support", "SLA 99.9%", "Custom Integrations"]'
+            cta-text="Contact Sales"
+          >
+            <span slot="tag"></span>
+          </pricing-card>
+        </div>
+      </main>
+      <footer>
+        <small>Click any button to see the custom event in the console.</small>
+      </footer>
+    </div>
+
+    <script>
+      // Log CTA events for testing
+      document.addEventListener('pricing-card:cta', (e) => {
+        console.log('CTA clicked:', e.detail);
+      });
+    </script>
+  </body>
+</html>
